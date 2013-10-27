@@ -38,7 +38,42 @@ class bdPaygateJahanPay_Processor extends bdPaygate_Processor_Abstract
 
 	public function validateCallback(Zend_Controller_Request_Http $request, &$transactionId, &$paymentStatus, &$transactionDetails, &$itemId)
 	{
-		throw new XenForo_Exception('to be implemented');
+		$amount = false;
+		$currency = false;
+
+		return $this->validateCallback2($request, $transactionId, $paymentStatus, $transactionDetails, $itemId, $amount, $currency);
+	}
+
+	public function validateCallback2(Zend_Controller_Request_Http $request, &$transactionId, &$paymentStatus, &$transactionDetails, &$itemId, &$amount, &$currency)
+	{
+		$input = new XenForo_Input($request);
+		$filtered = $input->filter(array(
+			'amount' => XenForo_Input::STRING,
+			'order_id' => XenForo_Input::STRING,
+			'au' => XenForo_Input::STRING,
+		));
+
+		$transactionId = 'jahanpay_' . XenForo_Application::$time;
+		$paymentStatus = bdPaygate_Processor_Abstract::PAYMENT_STATUS_OTHER;
+		$transactionDetails = array_merge($_REQUEST, $filtered);
+		$itemId = $filtered['order_id'];
+		$amount = $filtered['amount'];
+		$currency = self::CURRENCY_TOMAN;
+		$processorModel = $this->getModelFromCache('bdPaygate_Model_Processor');
+
+		try
+		{
+			bdPaygateJahanPay_Helper::verification($api, $amount, $filtered['au']);
+		}
+		catch (XenForo_Exception $e)
+		{
+			$this->_setError($e->getMessage());
+			return false;
+		}
+
+		$paymentStatus = bdPaygate_Processor_Abstract::PAYMENT_STATUS_ACCEPTED;
+
+		return true;
 	}
 
 	public function generateFormData($amount, $currency, $itemName, $itemId, $recurringInterval = false, $recurringUnit = false, array $extraData = array())
