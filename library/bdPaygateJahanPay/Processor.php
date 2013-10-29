@@ -63,6 +63,7 @@ class bdPaygateJahanPay_Processor extends bdPaygate_Processor_Abstract
 
 		try
 		{
+			$api = XenForo_Application::getOptions()->get('bdPaygateJahanPay_api');
 			bdPaygateJahanPay_Helper::verification($api, $amount, $filtered['au']);
 		}
 		catch (XenForo_Exception $e)
