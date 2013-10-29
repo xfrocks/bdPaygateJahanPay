@@ -94,6 +94,7 @@ class bdPaygateJahanPay_Processor extends bdPaygate_Processor_Abstract
 		$params = http_build_query(array(
 			'_amount' => $amount,
 			'_item_id' => $itemId,
+			'_return_url' => $this->_generateReturnUrl($extraData),
 		));
 		if (strpos($callbackUrl, '?') === false)
 		{
@@ -117,6 +118,18 @@ class bdPaygateJahanPay_Processor extends bdPaygate_Processor_Abstract
 EOF;
 
 		return $form;
+	}
+
+	public function redirectOnCallback(Zend_Controller_Request_Http $request, $paymentStatus, $processMessage)
+	{
+		$returnUrl = $request->getParam('_return_url');
+		if (!empty($returnUrl))
+		{
+			header('Location: ' . $returnUrl);
+			return true;
+		}
+		
+		return parent::redirectOnCallback($request, $paymentStatus, $processMessage);
 	}
 
 }
