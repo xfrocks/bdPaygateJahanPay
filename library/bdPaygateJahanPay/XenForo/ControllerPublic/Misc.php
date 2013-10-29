@@ -5,7 +5,7 @@ class bdPaygateJahanPay_XenForo_ControllerPublic_Misc extends XFCP_bdPaygateJaha
 	public function actionJahanPay()
 	{
 		$input = $this->_input->filter(array(
-			'amount' => XenForo_Input::STRING,
+			'amount' => XenForo_Input::UINT,
 			'itemName' => XenForo_Input::STRING,
 			'itemId' => XenForo_Input::STRING,
 			'callbackUrl' => XenForo_Input::STRING,

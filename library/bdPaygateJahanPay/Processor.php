@@ -48,7 +48,7 @@ class bdPaygateJahanPay_Processor extends bdPaygate_Processor_Abstract
 	{
 		$input = new XenForo_Input($request);
 		$filtered = $input->filter(array(
-			'_amount' => XenForo_Input::STRING,
+			'_amount' => XenForo_Input::UINT,
 			'_item_id' => XenForo_Input::STRING,
 			'au' => XenForo_Input::STRING,
 		));
@@ -78,6 +78,8 @@ class bdPaygateJahanPay_Processor extends bdPaygate_Processor_Abstract
 
 	public function generateFormData($amount, $currency, $itemName, $itemId, $recurringInterval = false, $recurringUnit = false, array $extraData = array())
 	{
+		$amount = intval($amount);
+
 		$this->_assertAmount($amount);
 		$this->_assertCurrency($currency);
 		$this->_assertItem($itemName, $itemId);
