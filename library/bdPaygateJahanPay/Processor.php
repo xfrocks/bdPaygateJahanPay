@@ -48,16 +48,16 @@ class bdPaygateJahanPay_Processor extends bdPaygate_Processor_Abstract
 	{
 		$input = new XenForo_Input($request);
 		$filtered = $input->filter(array(
-			'amount' => XenForo_Input::STRING,
-			'order_id' => XenForo_Input::STRING,
+			'_amount' => XenForo_Input::STRING,
+			'_item_id' => XenForo_Input::STRING,
 			'au' => XenForo_Input::STRING,
 		));
 
 		$transactionId = 'jahanpay_' . XenForo_Application::$time;
 		$paymentStatus = bdPaygate_Processor_Abstract::PAYMENT_STATUS_OTHER;
 		$transactionDetails = array_merge($_REQUEST, $filtered);
-		$itemId = $filtered['order_id'];
-		$amount = $filtered['amount'];
+		$itemId = $filtered['_item_id'];
+		$amount = $filtered['_amount'];
 		$currency = self::CURRENCY_TOMAN;
 		$processorModel = $this->getModelFromCache('bdPaygate_Model_Processor');
 
@@ -85,8 +85,21 @@ class bdPaygateJahanPay_Processor extends bdPaygate_Processor_Abstract
 
 		$formAction = XenForo_Link::buildPublicLink('canonical:misc/jahan-pay');
 		$callToAction = new XenForo_Phrase('bdpaygatejahanpay_call_to_action');
-		$callbackUrl = $this->_generateCallbackUrl($extraData);
 		$_xfToken = XenForo_Visitor::getInstance()->get('csrf_token_page');
+
+		$callbackUrl = $this->_generateCallbackUrl($extraData);
+		$params = http_build_query(array(
+			'_amount' => $amount,
+			'_item_id' => $itemId,
+		));
+		if (strpos($callbackUrl, '?') === false)
+		{
+			$callbackUrl .= '?' . $params;
+		}
+		else
+		{
+			$callbackUrl .= '&' . $params;
+		}
 
 		$form = <<<EOF
 <form action="{$formAction}" method="POST">
