@@ -6,11 +6,7 @@ class bdPaygateJahanPay_bdPaygate_Model_Processor extends XFCP_bdPaygateJahanPay
 	{
 		$currencies = parent::getCurrencies();
 
-		$api = XenForo_Application::getOptions()->get('bdPaygateJahanPay_api');
-		if (!empty($api))
-		{
-			$currencies[bdPaygateJahanPay_Processor::CURRENCY_TOMAN] = 'Toman';
-		}
+		$currencies[bdPaygateJahanPay_Processor::CURRENCY_TOMAN] = 'Toman';
 
 		return $currencies;
 	}
