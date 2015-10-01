@@ -3,6 +3,7 @@
 class bdPaygateJahanPay_Processor extends bdPaygate_Processor_Abstract
 {
 	const CURRENCY_TOMAN = 'tom';
+	const CURRENCY_TOMAN_NAME = 'Toman';
 
 	public function isAvailable()
 	{

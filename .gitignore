@@ -1,3 +1,5 @@
 .DS_Store
 *.devhelper
 library/bdPaygateJahanPay/DevHelper/Generated
+FileSums.php
+library/bdPaygateJahanPay/DevHelper/XFCP

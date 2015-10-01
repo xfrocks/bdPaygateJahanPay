@@ -6,7 +6,7 @@ class bdPaygateJahanPay_bdPaygate_Model_Processor extends XFCP_bdPaygateJahanPay
 	{
 		$currencies = parent::getCurrencies();
 
-		$currencies[bdPaygateJahanPay_Processor::CURRENCY_TOMAN] = 'Toman';
+		$currencies[bdPaygateJahanPay_Processor::CURRENCY_TOMAN] = bdPaygateJahanPay_Processor::CURRENCY_TOMAN_NAME;
 
 		return $currencies;
 	}
